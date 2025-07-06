@@ -1,0 +1,6 @@
+@TeamBalancer.API_HostAddress = http://localhost:5208
+
+GET {{TeamBalancer.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
