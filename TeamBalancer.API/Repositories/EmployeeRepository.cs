@@ -18,6 +18,12 @@ namespace TeamBalancer.API.Repositories
         {
             return await dbContext.Employees.ToListAsync();
         }
+        public async Task<Employee?> GetEmployeeByIdAsync(Guid id)
+        {
+            return await dbContext.Employees.FindAsync(id).AsTask();
+
+
+        }
         public async Task<Employee> CreateEmployeeAsync(Employee employee)
         {
             await dbContext.Employees.AddAsync(employee);
@@ -58,14 +64,25 @@ namespace TeamBalancer.API.Repositories
         }
         public async Task<IEnumerable<Employee>> GetEmployeesByRoleAsync(string role)
         {
-            return await dbContext.Employees.Where(e => e.Position.Equals(role, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+            return await dbContext.Employees.Where(e => e.Position == role).ToListAsync();
         }
 
-        public async Task<Employee?> GetEmployeeByIdAsync(Guid id)
+        public async Task<IEnumerable<Employee>> GetEmployeesByTeamAndRoleAsync(Guid teamId, string role)
         {
-            return await dbContext.Employees.FindAsync(id).AsTask();
+           return await dbContext.Employees.Where(e => e.TeamId == teamId && e.Position.ToLower() == role.ToLower()).ToListAsync();
+        }
 
+        public async Task<IEnumerable<Employee>> SearchESearchEmployeesAsync(string searchTerm)
+        {
+            return await dbContext.Employees.Where(e => e.FullName.Contains(searchTerm) || e.Email.Contains(searchTerm))
+                .ToListAsync(); 
+        }
 
+        public async Task<IEnumerable<Employee>> GetEmployeesPagedAsync(int pageNumber, int pageSize)
+        {
+            return await dbContext.Employees.Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
     }
 }

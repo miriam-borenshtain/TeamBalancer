@@ -9,5 +9,7 @@ namespace TeamBalancer.API.Repositories
         Task<Team> CreateTeamAsync(Team team);
         Task<Team?> UpdateTeamAsync(Team team);
         Task<bool> DeleteTeamAsync(Guid id);
+
+        Task<Employee?> GetTeamManagerAsync(Guid teamId);
     }
 }

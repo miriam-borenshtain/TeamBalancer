@@ -58,6 +58,11 @@ namespace TeamBalancer.API.Repositories
 
 
         }
+
+        public Task<Employee?> GetTeamManagerAsync(Guid teamId)
+        {
+            var manager = dbContext.Teams.FindAsync(teamId)
+        }
     }
 
 }
