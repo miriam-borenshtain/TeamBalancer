@@ -14,9 +14,9 @@ namespace TeamBalancer.API.Repositories
             dbContext = context;
         }
 
-        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
+        public async Task<List<Employee>> GetAllEmployeesAsync()
         {
-            return await dbContext.Employees.ToListAsync();
+            return await dbContext.Employees.Include("Team").AsQueryable().ToListAsync();
         }
         public async Task<Employee?> GetEmployeeByIdAsync(Guid id)
         {
@@ -30,22 +30,10 @@ namespace TeamBalancer.API.Repositories
             await dbContext.SaveChangesAsync();
             return employee;
         }
-        public async Task<Employee?> UpdateEmployeeAsync(Employee employee)
+        public async Task UpdateEmployeeAsync(Employee employee)
         {
-            var existingEmployee = await GetEmployeeByIdAsync(employee.Id);
-            if (existingEmployee == null)
-            {
-                return null;
-            }
-            existingEmployee.FullName = employee.FullName;
-            existingEmployee.Email = employee.Email;
-            existingEmployee.Position = employee.Position;
-            existingEmployee.HireDate = employee.HireDate;
-            existingEmployee.IsActive = employee.IsActive;
-            existingEmployee.TeamId = employee.TeamId;
-            dbContext.Employees.Update(existingEmployee);
+            dbContext.Employees.Update(employee);
             await dbContext.SaveChangesAsync();
-            return existingEmployee;
         }
         public async Task<bool> DeleteEmployeeAsync(Guid id)
         {

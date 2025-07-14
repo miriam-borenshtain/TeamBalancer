@@ -1,6 +1,10 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using TeamBalancer.API.Data;
+using TeamBalancer.API.Mapping;
+using TeamBalancer.API.Repositories;
+using TeamBalancer.API.Services;
 
 namespace TeamBalancer.API
 {
@@ -19,6 +23,11 @@ namespace TeamBalancer.API
 
             builder.Services.AddDbContext<TeamBalancerDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("TeamBalancerConnectionString")));
+
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+            builder.Services.AddAutoMapper(typeof(EmployeeProfile));
 
             var app = builder.Build();
 
