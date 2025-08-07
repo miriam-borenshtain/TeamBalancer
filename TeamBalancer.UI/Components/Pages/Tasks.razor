@@ -1,0 +1,89 @@
+﻿@page "/tasks"
+@rendermode InteractiveServer
+
+@using TeamBalancer.UI.Components.TaskComponents;
+@inject HttpClient Http
+
+
+<PageTitle>משימות</PageTitle>
+
+<h1 class="page-title">ניהול משימות</h1>
+
+<div class="filters-row">
+<label class="select-drop">
+    סטטוס:
+    <select  @bind="isCompletedFilter" >
+        <option value="">הכל</option>
+        <option value="true">הושלם</option>
+        <option value="false">בתהליך</option>
+    </select>
+</label>
+
+<label class="select-drop">
+    סוג משימה:
+    <select @bind="typeTaskFilter">
+        <option value="">הכל</option>
+        <option value="0">פיתוח</option>
+        <option value="1">בדיקות </option>
+        <option value="2">תיעוד</option>
+        <option value="3">תכנון</option>
+        <option value="4">מחקר</option>
+        <option value="4">תחזוקה</option>
+        <option value="4">אחר</option>
+    </select>
+</label>
+</div>
+
+
+@if (tasks == null)
+{
+    <div><p>Loading...</p></div>
+}
+else if (FilteredTasks(tasks) == null)
+{
+    <div class="empty-state">
+        לא נמצאו משימות מתאימות.
+    </div>
+}
+else 
+{
+    <div class="task-cards-container">
+        @foreach (var task in FilteredTasks(tasks))
+        {
+            <TeamBalancer.UI.Components.TaskComponents.TaskCard Task="@task" />
+        }
+    </div>
+}
+
+
+@code {
+    private List<TaskItem>? tasks;
+    private string? isCompletedFilter = null;
+    private string? typeTaskFilter = null;
+
+
+    private IEnumerable<TaskItem>? FilteredTasks(List<TaskItem>? tasks)
+    {
+        var filterTasks = tasks == null ? Enumerable.Empty<TaskItem>() :
+        string.IsNullOrEmpty(isCompletedFilter) ? tasks :
+        isCompletedFilter == "true" ? tasks.Where(t => t.IsCompleted) :
+        tasks.Where(t => !t.IsCompleted);
+
+        filterTasks = filterTasks == null ? Enumerable.Empty<TaskItem>() :
+        string.IsNullOrEmpty(typeTaskFilter) ? filterTasks :
+        filterTasks.Where(t => (int)t.TaskType == int.Parse(typeTaskFilter));
+
+        if (filterTasks == null || !filterTasks.Any())
+        {
+            return null;
+        }
+        return filterTasks;
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        tasks = await Http.GetFromJsonAsync<List<TaskItem>>("/api/Task");
+    }
+
+}

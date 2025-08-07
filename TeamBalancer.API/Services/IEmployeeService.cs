@@ -14,7 +14,7 @@ namespace TeamBalancer.API.Services
         Task<IEnumerable<EmployeeDto>> GetEmployeesByTeamIdAsync(Guid teamId);
         Task<IEnumerable<EmployeeDto>> GetEmployeesByRoleAsync(string role);
         Task<IEnumerable<EmployeeDto>> GetEmployeesByTeamAndRoleAsync(Guid teamId, string role);
-        Task<IEnumerable<EmployeeDto>> SearchESearchEmployeesAsync(string searchTerm);
+        Task<IEnumerable<EmployeeDto>> SearchEmployeesAsync(string searchTerm);
         Task<IEnumerable<EmployeeDto>> GetEmployeesPagedAsync(int pageNumber, int pageSize);
 
 

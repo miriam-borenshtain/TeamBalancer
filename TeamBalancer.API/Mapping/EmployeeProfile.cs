@@ -12,6 +12,7 @@ namespace TeamBalancer.API.Mapping
             CreateMap<CreateEmployeeDto, Employee>().ReverseMap();
             CreateMap<UpdateEmployeeDto, Employee>().ReverseMap();
             CreateMap<Team, TeamDto>().ReverseMap();
+            CreateMap<TaskItem, TaskItemDto>().ReverseMap();
         }
     }
 }

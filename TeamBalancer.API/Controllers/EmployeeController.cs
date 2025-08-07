@@ -36,7 +36,6 @@ namespace TeamBalancer.API.Controllers
             return Ok(employee);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateEmployeeDto createEmployeeDto)
         {
@@ -56,5 +55,25 @@ namespace TeamBalancer.API.Controllers
             return Ok(updatedEmployee);
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string search)
+        {
+            var employees = await employeeService.SearchEmployeesAsync(search);
+            return Ok(employees);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var isDeleted = await employeeService.DeleteEmployeeAsync(id);
+            if (!isDeleted)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+
     }
+
 }

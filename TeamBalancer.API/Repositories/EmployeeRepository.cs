@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using TeamBalancer.API.Data;
 using TeamBalancer.API.Models.Domain;
 
@@ -20,7 +21,7 @@ namespace TeamBalancer.API.Repositories
         }
         public async Task<Employee?> GetEmployeeByIdAsync(Guid id)
         {
-            return await dbContext.Employees.FindAsync(id).AsTask();
+            return await dbContext.Employees.FindAsync(id);
 
 
         }
@@ -32,7 +33,7 @@ namespace TeamBalancer.API.Repositories
         }
         public async Task UpdateEmployeeAsync(Employee employee)
         {
-            dbContext.Employees.Update(employee);
+            dbContext.Entry(employee).CurrentValues.SetValues(employee);
             await dbContext.SaveChangesAsync();
         }
         public async Task<bool> DeleteEmployeeAsync(Guid id)
@@ -60,7 +61,7 @@ namespace TeamBalancer.API.Repositories
            return await dbContext.Employees.Where(e => e.TeamId == teamId && e.Position.ToLower() == role.ToLower()).ToListAsync();
         }
 
-        public async Task<IEnumerable<Employee>> SearchESearchEmployeesAsync(string searchTerm)
+        public async Task<IEnumerable<Employee>> SearchEmployeesAsync(string searchTerm)
         {
             return await dbContext.Employees.Where(e => e.FullName.Contains(searchTerm) || e.Email.Contains(searchTerm))
                 .ToListAsync(); 

@@ -1,0 +1,60 @@
+﻿<div class="task-item @TaskCardCssClass">
+    <div class="task-card-header d-flex align-items-center mb-2">
+        <span class="task-type-icon me-2">@GetTaskTypeIcon(task.TaskType)</span>
+        <span class="task-title">@task.Title</span>
+    </div>
+    <div class="task-card-body">
+    @if (!string.IsNullOrWhiteSpace(task.Description))
+    {
+        <div class="task-desc mb-2">@task.Description</div>
+    }
+    <div class="mb-1">
+        <strong>סוג משימה:</strong> @task.TaskType
+    </div>
+   
+    @if (task.DueDate != null)
+    {
+        <div class="mb-1">
+                <strong>תאריך יעד:</strong> @task.DueDate?.ToString("dd-MM-yyyy")
+        </div>
+    }
+    <div class="mb-1">
+        <strong>סטטוס:</strong>
+            <span class="task-status @(task.IsCompleted ? "done" : "pending")">
+                @(task.IsCompleted ? "הושלם" : "בתהליך")
+        </span>
+    </div>
+    @if (task.CompletedAt != null)
+    {
+        <div class="mb-1">
+                <strong>הושלם ב:</strong> @task.CompletedAt?.ToString("dd-MM-yyyy")
+        </div>
+    }
+    </div>
+    <footer class="task-card-footer mt-3">
+        <span><strong>הערכת זמן (בשעות):</strong> @task.EstimatedHours</span>
+        <span><strong>נוצר ב:</strong> @task.CreatedAt.ToString("dd-MM-yyyy")</span>
+    </footer>
+</div>
+
+
+@code {
+    [Parameter]
+    public TaskItem  task { get; set; } = default!;
+
+
+    private string GetTaskTypeIcon(TaskType type) => type switch
+        {
+            TaskType.Development => "💻",
+            TaskType.Testing => "🔍",
+            TaskType.Documentation => "📄",
+        TaskType.Design => "🖧",
+            TaskType.Research => "🔬",
+            TaskType.Maintenance => "🛠️",
+            TaskType.Other => "📦",
+            _ => "📋"
+        };
+
+    private string TaskCardCssClass => $"task-card {(task.IsCompleted ? "completed" : "incomplete")}";
+
+}

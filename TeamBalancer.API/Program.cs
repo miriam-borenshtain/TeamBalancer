@@ -27,6 +27,11 @@ namespace TeamBalancer.API
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
+
+            builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+            builder.Services.AddScoped<ITaskService, TaskService>();
+
+
             builder.Services.AddAutoMapper(typeof(EmployeeProfile));
 
             var app = builder.Build();

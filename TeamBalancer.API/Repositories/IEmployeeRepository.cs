@@ -12,7 +12,7 @@ namespace TeamBalancer.API.Repositories
         Task<IEnumerable<Employee>> GetEmployeesByTeamIdAsync(Guid teamId);
         Task<IEnumerable<Employee>> GetEmployeesByRoleAsync(string role);
         Task<IEnumerable<Employee>> GetEmployeesByTeamAndRoleAsync(Guid teamId, string role);
-        Task<IEnumerable<Employee>> SearchESearchEmployeesAsync(string searchTerm);
+        Task<IEnumerable<Employee>> SearchEmployeesAsync(string searchTerm);
         Task<IEnumerable<Employee>> GetEmployeesPagedAsync(int pageNumber, int pageSize);
     }
 }

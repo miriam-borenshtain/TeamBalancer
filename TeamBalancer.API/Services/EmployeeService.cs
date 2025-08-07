@@ -24,9 +24,15 @@ namespace TeamBalancer.API.Services
             return mapper.Map<EmployeeDto>(newEmployee);
         }
 
-        public Task<bool> DeleteEmployeeAsync(Guid id)
+        public async Task<bool> DeleteEmployeeAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var exsitEmployee = await employeeRepository.GetEmployeeByIdAsync(id);
+            if (exsitEmployee == null)
+            {
+                return false;
+            }
+            await employeeRepository.DeleteEmployeeAsync(id);
+            return true;
         }
 
         public async Task<IEnumerable<EmployeeDto>> GetAllEmployeesAsync()
@@ -54,9 +60,10 @@ namespace TeamBalancer.API.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<EmployeeDto>> GetEmployeesByTeamIdAsync(Guid teamId)
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeesByTeamIdAsync(Guid teamId)
         {
-            throw new NotImplementedException();
+            var employees = await employeeRepository.GetEmployeesByTeamIdAsync(teamId);
+            return mapper.Map<IEnumerable<EmployeeDto>>(employees);
         }
 
         public Task<IEnumerable<EmployeeDto>> GetEmployeesPagedAsync(int pageNumber, int pageSize)
@@ -64,9 +71,10 @@ namespace TeamBalancer.API.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<EmployeeDto>> SearchESearchEmployeesAsync(string searchTerm)
+        public async Task<IEnumerable<EmployeeDto>> SearchEmployeesAsync(string searchTerm)
         {
-            throw new NotImplementedException();
+            var employees = await employeeRepository.SearchEmployeesAsync(searchTerm);
+            return mapper.Map<IEnumerable<EmployeeDto>>(employees);
         }
 
         public async Task<EmployeeDto?> UpdateEmployeeAsync(Guid id, UpdateEmployeeDto updateEmployeeDto)
