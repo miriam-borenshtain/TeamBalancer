@@ -33,7 +33,6 @@ namespace TeamBalancer.API.Controllers
 
         [HttpPost]
         public async Task<ActionResult<TaskItemDto>> Add(TaskItemDto task)
-
         {
             var created = await taskService.AddAsync(task);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
